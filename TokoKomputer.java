@@ -24,6 +24,22 @@ public class TokoKomputer {
         return result;
     }
     
+    public static String renderProductsList(Product[] Products, NumberFormat currencyFormat, String solidHr, String dotedHr) {
+        System.out.printf("%s_\n|\n| List Produk Yang Tersedia\n%s\n",solidHr, dotedHr);
+            // menampilkan list produk dengan looping
+        for (int i = 0; i < Products.length; i++) {
+            System.out.printf("| %s- %s \n", addTab(Products[i].Name(), 2), currencyFormat.format(Products[i].Prize()));
+        }
+        System.out.println("\nTulis Nama Barang Dengan \"Lengkap\" Untuk Memilih!");
+    return "";}
+    
+    public static String renderShooper(HashMap<Integer, Integer> shooper, Product[] Products, NumberFormat currencyFormat, String solidHr, String dotedHr) {
+        System.out.println("\n_" + solidHr + "\n| PCS  NAMA BARANG \t\t\t\t| HARGA\n" + dotedHr);
+        for (HashMap.Entry<Integer, Integer> item : shooper.entrySet()) {
+            System.out.printf("|  %s   %s: %s\n", item.getValue().toString(), addTab(Products[item.getKey() - 1].Name(), 7), currencyFormat.format(Products[item.getKey() - 1].Prize()), item.getValue().toString());
+        }
+    return "";}
+    
 	public static void main (String[] args) {
         Boolean selectItem = true;
         Boolean showListProducts = true;
@@ -46,18 +62,14 @@ public class TokoKomputer {
             new Product("Arduino Uno", 53500),
             new Product("ESP 8266", 37800)
         };
+        
      	
 		while (selectItem == true) {
             String itemNameSelected = "";
 			int indexItemSelected = 0; 
 			
 			if (showListProducts == true) {
-                System.out.printf("%s_\n|\n| List Produk Yang Tersedia\n%s\n",solidHr, dotedHr);
-                // menampilkan list produk dengan looping
-                for (int i = 0; i < Products.length; i++) {
-                    System.out.printf("| %s- %s \n", addTab(Products[i].Name(), 2), currencyFormat.format(Products[i].Prize()));
-                }
-                System.out.println("\nTulis Nama Barang Dengan \"Lengkap\" Untuk Memilih!");
+                renderProductsList(Products, currencyFormat, solidHr, dotedHr);
             }
             // menyimpan pilihan pengguna
             itemNameSelected = scanner.nextLine().toLowerCase();
@@ -116,10 +128,7 @@ public class TokoKomputer {
                         // menampilkan list produk
                         showListProducts = true;
                     } else if (inputOption.equals("pcs")) {
-                        System.out.println("\n_" + solidHr + "\n| PCS  NAMA BARANG \t\t\t\t| HARGA\n" + dotedHr);
-                        for (HashMap.Entry<Integer, Integer> entry : shooper.entrySet()) {
-                            System.out.printf("|  %s   %s: %s\n", entry.getValue().toString(), addTab(Products[entry.getKey() - 1].Name(), 7), currencyFormat.format(Products[entry.getKey() - 1].Prize()), entry.getValue().toString());
-                        }
+                        renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
                         System.out.println("\nSilahkan Masukkan Nama Barang Yang Ingin Diubah Jumlah PCS-nya!");
                         String ChangePCS = scanner.nextLine();
                         for (HashMap.Entry<Integer, Integer> entry : shooper.entrySet()) {
@@ -127,10 +136,11 @@ public class TokoKomputer {
                                 System.out.printf("Masukkan Berapa PCS Untuk Produk %s : ", Products[entry.getKey() - 1].Name());
                                 int countPCS = scanner.nextInt();
                                 shooper.put(entry.getKey(), countPCS);
-                                System.out.println("\n_" + solidHr + "\n| PCS  NAMA BARANG \t\t\t\t| HARGA\n" + dotedHr);
+                                renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
+                                /*System.out.println("\n_" + solidHr + "\n| PCS  NAMA BARANG \t\t\t\t| HARGA\n" + dotedHr);
                                 for (HashMap.Entry<Integer, Integer> item : shooper.entrySet()) {
                                     System.out.printf("|  %s   %s: %s\n", item.getValue().toString(), addTab(Products[item.getKey() - 1].Name(), 7), currencyFormat.format(Products[item.getKey() - 1].Prize()), item.getValue().toString());
-                                }
+                                }*/
                                 System.out.printf("\nAnda Telah Mengubah PCS Produk %s\n", Products[entry.getKey() - 1].Name());
                             }
                         }
