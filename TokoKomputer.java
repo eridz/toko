@@ -137,10 +137,6 @@ public class TokoKomputer {
                                 int countPCS = scanner.nextInt();
                                 shooper.put(entry.getKey(), countPCS);
                                 renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
-                                /*System.out.println("\n_" + solidHr + "\n| PCS  NAMA BARANG \t\t\t\t| HARGA\n" + dotedHr);
-                                for (HashMap.Entry<Integer, Integer> item : shooper.entrySet()) {
-                                    System.out.printf("|  %s   %s: %s\n", item.getValue().toString(), addTab(Products[item.getKey() - 1].Name(), 7), currencyFormat.format(Products[item.getKey() - 1].Prize()), item.getValue().toString());
-                                }*/
                                 System.out.printf("\nAnda Telah Mengubah PCS Produk %s\n", Products[entry.getKey() - 1].Name());
                             }
                         }
