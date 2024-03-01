@@ -1,5 +1,3 @@
-//package TokoKomputer;
-
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Scanner;
@@ -26,7 +24,6 @@ public class TokoKomputer {
     
     public static String renderProductsList(Product[] Products, NumberFormat currencyFormat, String solidHr, String dotedHr) {
         System.out.printf("%s_\n|\n| List Produk Yang Tersedia\n%s\n",solidHr, dotedHr);
-            // menampilkan list produk dengan looping
         for (int i = 0; i < Products.length; i++) {
             System.out.printf("| %s- %s \n", addTab(Products[i].Name(), 2), currencyFormat.format(Products[i].Prize()));
         }
@@ -71,64 +68,47 @@ public class TokoKomputer {
 			if (showListProducts == true) {
                 renderProductsList(Products, currencyFormat, solidHr, dotedHr);
             }
-            // menyimpan pilihan pengguna
             itemNameSelected = scanner.nextLine().toLowerCase();
 			
 			for (int i = 0; i < Products.length; i++) {
-                // mengecek apakah pilihan valid
 				if (itemNameSelected.equals(Products[i].Name().toLowerCase())) {
-				    // jika valid simpan index produk
 					indexItemSelected = i + 1;
 				} else {
-				    // list produk tidak akan ditampilkan
 					showListProducts = false;
 				}
 			}
 			
-			// jika index != 0 maka akan dijalankan
 			if (indexItemSelected != 0) {
-                // inisialisasi nilai default pcs 
                 int pcs = 1;
-                // inisialisasi nilai default inputOptionValid 
                 Boolean inputOptionValid = true;
-                // melooping keranjang belanjaan
                 for (HashMap.Entry<Integer, Integer> entry : shooper.entrySet()) {
-                    // jika barang terpilih sudah ada di keranjang
                     if (entry.getKey() == indexItemSelected) {
-                        // tambahkan 1 pcs lagi
                         pcs += entry.getValue();
                     }
                 }
                 
-                // memperbarui barang dan pcs di keranjang belanjaan
                 shooper.put(indexItemSelected, pcs);
                 renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
-                // menampilkan dialog opsi ( $ / + / PCS )
-                System.out.printf("\nAnda Telah Menambahkan \'%s\'\nKetik $ (bayar) atau + (tambah) atau PCS (Change PCS) : ", Products[indexItemSelected - 1].Name());
+                System.out.printf("\nAnda Telah Menambahkan \'%s\'\n", Products[indexItemSelected - 1].Name());
+                System.out.print("Ketik $ (bayar) atau + (tambah) atau PCS (jumlah PCS) : ");
                 
-                // mengecek nilai inputOptionValid (default = true)
                 while (inputOptionValid) {
-                    // meminta pengguna memilih opsi ( $ / + / PCS )
                     String inputOption = scanner.nextLine().toLowerCase();
-                    // mengecek Pilih pengguna
                     if (inputOption.equals("$")) {
-                        // memberhentikan pengguna untuk memilih barang
                         selectItem = false;
-                        // memberhentikan meminta pengguna memilih opsi ( $ / + / PCS )
                         inputOptionValid = false;
                     } else if (inputOption.equals("+")) {
-                        // mengulangi pengguna untuk memilih barang
                         selectItem = true;
-                        // memberhentikan meminta pengguna memilih opsi ( $ / + / PCS )
                         inputOptionValid = false;
-                        // menampilkan list produk
                         showListProducts = true;
                     } else if (inputOption.equals("pcs")) {
                         renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
                         System.out.println("\nSilahkan Masukkan Nama Barang Yang Ingin Diubah Jumlah PCS-nya!");
                         String ChangePCS = scanner.nextLine().toLowerCase();
+                        Boolean validName = true;
                         for (HashMap.Entry<Integer, Integer> entry : shooper.entrySet()) {
                             if (ChangePCS.equals(Products[entry.getKey() - 1].Name().toLowerCase())) {
+                                validName = false;
                                 System.out.printf("\nMasukkan Jumlah PCS Untuk Produk \'%s\' : ", Products[entry.getKey() - 1].Name());
                                 int countPCS = scanner.nextInt();
                                 if (countPCS > 0) {
@@ -136,46 +116,40 @@ public class TokoKomputer {
                                     renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
                                     System.out.printf("\nAnda Telah Mengubah PCS Produk \'%s\'\n", Products[entry.getKey() - 1].Name());
                                 } else {
-                                    System.out.print("\nInput \'Tidak Valid\' Merubah Jumlah PCS Dibatalkan!!\n");
                                     renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
+                                    System.out.print("\nInput \'Tidak Valid\' Merubah Jumlah PCS Dibatalkan!!\n");
                                 }
                             }
                         }
+                        if (validName) {
+                            renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
+                            System.out.print("\nNama Produk Tidak Valid!! Gagal Mengubah Jumlah PCS!!\n");
+                            System.out.print("Ketik $ (bayar) atau + (tambah) atau PCS (jumlah PCS) : ");
+                        }
                     } else {
-                        // menampilkan dialog jika input tidak Valid
-                        System.out.print("Ketik $ (bayar) atau + (tambah) atau PCS (Change PCS) : ");
+                        System.out.print("Ketik $ (bayar) atau + (tambah) atau PCS (jumlah PCS) : ");
                     }
                 }
-            // menampilkan dialog jika input tidak Valid
+                
             } else {
-                // inisialisasi underlineDash dengan String kosong
                 String underlineDash = "";
-                // membuat underline pada input tidak Valid
                 for (int i = 0; i < itemNameSelected.length(); i++) {
-                    // menambahkan - sebanyak karakter inputnya
                     underlineDash += "-";
                 }
                 System.out.printf("%s\nTidak Valid! Silahkan Masukkan Nama Yang Sesuai!!\n", underlineDash);
 	        }
 		}
-        // menampilkan header 'nota'
         System.out.printf("_%s\n|\n|\t\t\t    TOKO JAYA KOMPUTER \n|\t\t\t JL.Juanda No.64 Surabaya \n|%s\n", solidHr, solidHr);
-        // inisialisasi totalBiaya dengan nilai 0
 		int totalBiaya = 0;
-		// melooping isi keranjang untuk 'nota'
         for (HashMap.Entry<Integer, Integer> entry : shooper.entrySet()) {
-            // mendeklarasikan nilai biaya pada setiap barang
 		    int biaya = Products[entry.getKey() - 1].Prize() * entry.getValue();
-		    // menjumlahkan nilai biaya
 			totalBiaya += biaya;
-			// menampilkan isi keranjang
             System.out.printf("| %s %s: %s\n", entry.getValue().toString(), addTab(Products[entry.getKey() - 1].Name(), 4), currencyFormat.format(biaya));
 		}
-        // menampilkan total biaya
 		System.out.printf("%s\n| * TOTAL BIAYA\t\t\t\t\t: %s\n|%s", dotedHr, currencyFormat.format(totalBiaya), solidHr);
 	}
 }
-// membuat class baru yang berfungsi seperti objek di javascript 
+
 class Product {
 
 	private String _name;
