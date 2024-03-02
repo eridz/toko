@@ -6,7 +6,6 @@ import java.util.HashMap;
 public class TokoKomputer {
 	public static void main (String[] args) {
         Boolean selectItem = true;
-        Boolean showListProducts = true;
 		Scanner scanner = new Scanner(System.in);
 		HashMap<Integer, Integer> shooper = new HashMap<>();
 		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
@@ -27,21 +26,18 @@ public class TokoKomputer {
             new Product("ESP 8266", 37800)
         };
         
-     	
+     	String selectAddProductMassage = "";
 		while (selectItem == true) {
             String itemNameSelected = "";
 			int indexItemSelected = 0; 
 			
-			if (showListProducts == true) {
-                Function.renderProductsList(Products, currencyFormat, solidHr, dotedHr);
-            }
+            Function.renderProductsList(Products, currencyFormat, solidHr, dotedHr, selectAddProductMassage);
+            
             itemNameSelected = scanner.nextLine().toLowerCase();
 			
 			for (int i = 0; i < Products.length; i++) {
 				if (itemNameSelected.equals(Products[i].Name().toLowerCase())) {
 					indexItemSelected = i + 1;
-				} else {
-					showListProducts = false;
 				}
 			}
 			
@@ -67,7 +63,6 @@ public class TokoKomputer {
                     } else if (inputOption.equals("+")) {
                         selectItem = true;
                         inputOptionValid = false;
-                        showListProducts = true;
                     } else if (inputOption.equals("pcs")) {
                         Function.renderShooper(shooper, Products, currencyFormat, solidHr, dotedHr);
                         System.out.println("\nSilahkan Masukkan Nama Barang Yang Ingin Diubah Jumlah PCS-nya!");
@@ -103,7 +98,7 @@ public class TokoKomputer {
                 for (int i = 0; i < itemNameSelected.length(); i++) {
                     underlineDash += "-";
                 }
-                System.out.printf("%s\nTidak Valid! Silahkan Masukkan Nama Yang Sesuai!!\n", underlineDash);
+                selectAddProductMassage = "\n" + itemNameSelected + "\n" + underlineDash + "\nInput Anda Tidak Valid! Mungkin Ada Kesalahan Dalam Mengetik!";
 	        }
 		}
         System.out.printf("_%s\n|\n|\t\t\t    TOKO JAYA KOMPUTER \n|\t\t\t JL.Juanda No.64 Surabaya \n|%s\n", solidHr, solidHr);
@@ -143,14 +138,14 @@ class Function {
         }
     return result;}
     
-    public static String renderProductsList(Product[] Products, NumberFormat currencyFormat, String solidHr, String dotedHr) {
+    public static String renderProductsList(Product[] Products, NumberFormat currencyFormat, String solidHr, String dotedHr, String selectAddProductMassage) {
         System.out.printf("%s_\n|\n| List Produk Yang Tersedia\n%s\n",solidHr, dotedHr);
         
         for (int i = 0; i < Products.length; i++) {
             System.out.printf("| %s- %s \n", addTab(Products[i].Name(), 2), currencyFormat.format(Products[i].Prize()));
         }
         
-        System.out.println("\nTulis Nama Barang Dengan \'Lengkap\' Untuk Memilih!");
+        System.out.printf("%s\nTulis Nama Barang Dengan \'Lengkap\' Untuk Memilih!\n", selectAddProductMassage);
     return "";}
 }
 
